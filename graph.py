@@ -167,8 +167,7 @@ class Graph:
 
     #O(3n + 4) = O(n)
     def q6_analitica(self, i, j, array):
-        iStart = (int)(self.numVertices*i - i*(i+1)/2)
-        indexArray = (int)(iStart+j-(i+1))
+        indexArray = (int)((self.numVertices*i - i*(i+1)/2)+j-(i+1))
         for k in range(0, len(array)):
             if(array[k] == indexArray):
                 return array[k]
@@ -185,7 +184,7 @@ class Graph:
         return index
 
     #O(2^n)
-    def utilCompactedIndexFromMatrix(self, i, j, k, l, index, matrix, array):
+    def util_q6_recursiva(self, i, j, k, l, index, matrix, array):
         index += matrix[k][l]
         if(k == i and l == j):
             return array[index]
@@ -194,34 +193,33 @@ class Graph:
             if(l >= self.numVertices):
                 k += 1
                 l = k + 1
-            return self.utilCompactedIndexFromMatrix(i, j, k, l, index, matrix, array)
+            return self.util_q6_recursiva(i, j, k, l, index, matrix, array)
 
     #O(2^n)
     def q6_recursiva(self, i, j, array, matrix):
         index = -1
-        return self.utilCompactedIndexFromMatrix(i, j, 0, 1, index, matrix, array)
+        return self.util_q6_recursiva(i, j, 0, 1, index, matrix, array)
 
     #O(n²)
     def q7_global(self, flag):
         array_size = len(self.compacted_array())
         for i in range(0, array_size):
             if flag == 1:
-                self.q7_getMatrixIndexFromCompacted_A(i)
+                self.q7_analitica(i)
             else:
-                self.q7_getMatrixIndexFromCompacted_I(i)
+                self.q7_iterativa(i)
 
-    def q7_getMatrixIndexFromCompacted_A(self, indexCompacted):
+    def q7_analitica(self, indexCompacted):
         matrix = self.adjMatrix
         array = self.compacted_array()
         index = array[indexCompacted]
-        Ic = (int)(self.numVertices*(self.numVertices-1)/2 - index)
-        Ie = ceil((1+sqrt(8*Ic+1))/2.0)
-        i = (int)(self.numVertices - int(Ie))
-        j = (int)(-self.numVertices*i + i*(i+1)/2 + (i+1) + index)
-        print("(", i, ",", j, ")#", matrix[i][j])
+        k = (int)(self.numVertices*(self.numVertices-1)/2 - index)
+        i = (int)(self.numVertices - int(np.ceil((1+sqrt(8*k+1))/2.0)))
+        j = (int)(-self.numVertices*i + i*(i+1)/2 + (i+1) + index) 
+        print("(", i, ",", j, ") -> ", matrix[i][j])
 
         #O(3n² + n + 9) = O(n²)
-    def q7_getMatrixIndexFromCompacted_I(self, indexCompacted):
+    def q7_iterativa(self, indexCompacted):
         matrix = self.adjMatrix
         array = self.compacted_array()
         index = array[indexCompacted]
@@ -229,7 +227,7 @@ class Graph:
         for i in range(0, self.numVertices):
             for j in range(i+1, self.numVertices):
                 if count == index:
-                    print(index, "#", matrix[i][j])
+                    print("(", i, ",", j, ") -> ", matrix[i][j])
                     return
                 count += 1
         print("-1")
