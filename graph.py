@@ -59,7 +59,7 @@ class Graph:
         for i in range(0, self.numVertices):
             self.addVertex(i)
 
-        for i in range(0, int(self.numVertices / 10)):
+        for i in range(0, int(self.numVertices/10)):
             start = randint(0, self.numVertices-1)
             finish = randint(0, self.numVertices-1)
             if (start != finish):
@@ -126,8 +126,8 @@ class Graph:
 
     def get_binary_array(self):
         binary_array = []
-        for i in range(0, 3):
-            for j in range(i+1, 3):
+        for i in range(0, self.numVertices):
+            for j in range(i+1, self.numVertices):
                 if (i < j):
                     binary_array.append(self.adjMatrix[i][j])
         print("binary", binary_array)
@@ -136,7 +136,7 @@ class Graph:
     def compacted_array(self):
         binArray = self.get_binary_array()
         compacted = []
-        for i in range(0, int(3*(3-1)/2)):
+        for i in range(0, int(self.numVertices*(self.numVertices-1)/2)):
             if(binArray[i]):
                 compacted.append(i)
         print("compa", compacted)
@@ -147,10 +147,10 @@ class Graph:
         matrix = []
         index = 0
         pos = 0
-        for i in range(3):
-            matrix.append([0 for i in range(3)])
-        for i in range(0, 3):
-            for j in range(i+1, 3):
+        for i in range(self.numVertices):
+            matrix.append([0 for i in range(self.numVertices)])
+        for i in range(0, self.numVertices):
+            for j in range(i+1, self.numVertices):
                 if(index == compacted[pos]):
                     matrix[i][j] = 1
                     matrix[j][i] = 1
@@ -163,8 +163,8 @@ class Graph:
     def q6_global(self, flag):
         matrix = self.get_matrix_from_compacted_array()
         array = self.compacted_array()
-        for i in range(0, 3):
-            for j in range(i+1, 3):
+        for i in range(0, self.numVertices):
+            for j in range(i+1, self.numVertices):
                 if matrix[i][j]:
                     if flag == 1:
                         self.q6_analitica(i, j, array)
@@ -174,7 +174,7 @@ class Graph:
                         self.q6_recursiva(i, j, array, matrix)
 
     def q6_analitica(self, i, j, array):
-        iStart = (int)(3*i - i*(i+1)/2)
+        iStart = (int)(self.numVertices*i - i*(i+1)/2)
         indexArray = (int)(iStart+j-(i+1))
         for k in range(0, len(array)):
             if(array[k] == indexArray):
@@ -183,8 +183,8 @@ class Graph:
 
     def q6_iterativa(self, i, j, array, matrix):
         index = -1
-        for k in range(0, 3):
-            for l in range(k+1, 3):
+        for k in range(0, self.numVertices):
+            for l in range(k+1, self.numVertices):
                 index += matrix[k][l]
                 if(k == i and l == j):
                     return array[index]
@@ -196,7 +196,7 @@ class Graph:
             return array[index]
         else:
             l += 1
-            if(l >= 3):
+            if(l >= self.numVertices):
                 k += 1
                 l = k + 1
             return self.utilCompactedIndexFromMatrix(i, j, k, l, index, matrix, array)
@@ -217,10 +217,10 @@ class Graph:
         matrix = self.get_matrix_from_compacted_array()
         array = self.compacted_array()
         index = array[indexCompacted]
-        Ic = (int)(3*(3-1)/2 - index)
+        Ic = (int)(self.numVertices*(self.numVertices-1)/2 - index)
         Ie = ceil((1+sqrt(8*Ic+1))/2.0)
-        i = (int)(3 - int(Ie))
-        j = (int)(-3*i + i*(i+1)/2 + (i+1) + index)
+        i = (int)(self.numVertices - int(Ie))
+        j = (int)(-self.numVertices*i + i*(i+1)/2 + (i+1) + index)
         print("(", i, ",", j, ")#")
         return matrix[i][j]
 
@@ -229,8 +229,8 @@ class Graph:
         array = self.compacted_array()
         index = array[indexCompacted]
         count = 0
-        for i in range(0, 3):
-            for j in range(i+1, 3):
+        for i in range(0, self.numVertices):
+            for j in range(i+1, self.numVertices):
                 if count == index:
                     print(index, "#")
                     return matrix[i][j]
@@ -277,24 +277,19 @@ def intersection_between_matrix(vet1, vet2):
     return res
 
 
-# graph = Graph()
-# graph.addVertex(1)
-# graph.addVertex(2)
-# graph.addEdge(1, 2)
-# graph.printVertice(1)
-# graph.printVertice(2)
 # graph.print_matrix()
 # graph.get_binary_array()
 # graph.compacted_array()
 # graph.get_matrix_from_compacted_array()
+graph1 = Graph(10)
+graph2 = Graph(10)
 
-graph = Graph(10)
-graph.print_adjacency()
+graph1.print_adjacency()
+graph2.print_adjacency()
 
 
 #  QUESTAO 8
-# vet1 = graph1.get_binary_array()
-# vet2 = graph2.get_binary_array()
-# print(sum_matrix_uniao(vet1, vet2))
-
+vet1 = graph1.get_binary_array()
+vet2 = graph2.get_binary_array()
+print(sum_matrix_uniao(vet1, vet2))
 # print(intersection_between_matrix(vet1, vet2))
