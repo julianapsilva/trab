@@ -22,6 +22,7 @@ class Vertex:
 
 class Graph:
 
+    #O(3n + 5) = O(n)
     def __init__(self, numVertices):
         self.vertList = {}
         self.numVertices = numVertices
@@ -44,6 +45,7 @@ class Graph:
         # return the NewVertex created
         return newVertex
 
+    #O(5n + 4) = O(n)
     def create_random_graph(self):
         for i in range(0, self.numVertices):
             self.addVertex(i)
@@ -104,6 +106,7 @@ class Graph:
     def printVertice(self, v):
         print(self.vertList[v].__str__())
 
+    #O(2n + 2) = O(n)
     def print_adjacency(self):
         for i in range(0, self.numVertices):
             self.printVertice(i)
@@ -113,6 +116,7 @@ class Graph:
         #     print(row)
         print(np.array(self.adjMatrix))
 
+    #O(2n² + 3n + 5) = O(n²)
     def get_binary_array(self):
         binary_array = []
         for i in range(0, self.numVertices):
@@ -121,6 +125,7 @@ class Graph:
                     binary_array.append(self.adjMatrix[i][j])
         return binary_array
 
+    #O(3n + 3) = O(n)
     def compacted_array(self):
         binArray = self.get_binary_array()
         compacted = []
@@ -129,6 +134,7 @@ class Graph:
                 compacted.append(i)
         return compacted
 
+    #O(2n² + 5n + 13) = O(n²)
     def get_matrix_from_compacted_array(self):
         compacted = self.compacted_array()
         matrix = []
@@ -145,6 +151,7 @@ class Graph:
                 index += 1
         return matrix
 
+    #O(2^n)
     def q6_global(self, flag):
         matrix = self.adjMatrix
         array = self.compacted_array()
@@ -158,6 +165,7 @@ class Graph:
                     else:
                         print(self.q6_recursiva(i, j, array, matrix))
 
+    #O(3n + 4) = O(n)
     def q6_analitica(self, i, j, array):
         iStart = (int)(self.numVertices*i - i*(i+1)/2)
         indexArray = (int)(iStart+j-(i+1))
@@ -166,6 +174,7 @@ class Graph:
                 return array[k]
         return -1
 
+    #O(2n² + 4n + 3) = O(n²)
     def q6_iterativa(self, i, j, array, matrix):
         index = -1
         for k in range(0, self.numVertices):
@@ -175,6 +184,7 @@ class Graph:
                     return array[index]
         return index
 
+    #O(2^n)
     def utilCompactedIndexFromMatrix(self, i, j, k, l, index, matrix, array):
         index += matrix[k][l]
         if(k == i and l == j):
@@ -186,10 +196,12 @@ class Graph:
                 l = k + 1
             return self.utilCompactedIndexFromMatrix(i, j, k, l, index, matrix, array)
 
+    #O(2^n)
     def q6_recursiva(self, i, j, array, matrix):
         index = -1
         return self.utilCompactedIndexFromMatrix(i, j, 0, 1, index, matrix, array)
 
+    #O(n²)
     def q7_global(self, flag):
         array_size = len(self.compacted_array())
         for i in range(0, array_size):
@@ -208,6 +220,7 @@ class Graph:
         j = (int)(-self.numVertices*i + i*(i+1)/2 + (i+1) + index)
         print("(", i, ",", j, ")#", matrix[i][j])
 
+        #O(3n² + n + 9) = O(n²)
     def q7_getMatrixIndexFromCompacted_I(self, indexCompacted):
         matrix = self.adjMatrix
         array = self.compacted_array()
@@ -239,21 +252,21 @@ class Graph:
         """
         return self.numVertices
 
-
+#O(3n + 3) = O(n)
 def sum_matrix(vet1, vet2):
     res = []
     for i in range(len(vet1)):
         res.append(vet1[i] + vet2[i])
     return res
 
-
+#O(3n + 3) = O(n)
 def sum_matrix_uniao(vet1, vet2):
     res = []
     for i in range(len(vet1)):
         res.append(vet1[i] or vet2[i])
     return res
 
-
+#O(3n + 3) = O(n)
 def intersection_between_matrix(vet1, vet2):
     res = []
     for i in range(len(vet1)):
