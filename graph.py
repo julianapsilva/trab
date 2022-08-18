@@ -22,7 +22,7 @@ class Vertex:
 
 class Graph:
 
-    #O(3n + 5) = O(n)
+    # O(3n + 5) = O(n)
     def __init__(self, numVertices):
         self.vertList = {}
         self.numVertices = numVertices
@@ -32,25 +32,16 @@ class Graph:
         self.create_random_graph()
 
     def addVertex(self, key):
-        """
-        Add a vertex to the Graph network with the id of key
-        Time complexity is O(1) as we are only adding a single
-        new vertex which does not affect any other vertex
-        """
         newVertex = Vertex(key)
-
-        # add the vertex with the key to the vertList dictionary
         self.vertList[key] = newVertex
-
-        # return the NewVertex created
         return newVertex
 
-    #O(5n + 4) = O(n)
+    # O(5n + 4) = O(n)
     def create_random_graph(self):
         for i in range(0, self.numVertices):
             self.addVertex(i)
 
-        for i in range(0, int(self.numVertices/1)):
+        for i in range(0, int(self.numVertices/2)):
             start = randint(0, self.numVertices-1)
             finish = randint(0, self.numVertices-1)
             if (start != finish):
@@ -61,42 +52,17 @@ class Graph:
                 self.addEdge(i, finish)
 
     def getVertex(self, key):
-        """
-        If vertex with key is in Graph then return the Vertex
-        Time complexity is O(1) as we are simply checking whether
-        the key exists or not in a dictionary and returning it
-        """
-
-        # use the get method to return the Vertex if it exists
-        # otherwise it will return None
         return self.vertList.get(key)
 
     def __contains__(self, key):
-        """
-        Check whether vertex with key is in the Graph
-        Time complexity is O(1) as we are simply checking whether
-        the key is in in the dictrionary or not
-        """
-
-        # returns True or False depending if in list
         return key in self.vertList
 
     def addEdge(self, f, t, weight=0):
-        """
-        Add an edge to connect two vertices of t and f with weight
-        assuming directed graph
-
-        Time complexity of O(1) as adding vertices if they don't
-        exist and then add neighbor
-        """
-
-        # add vertices if they do not exist
         if f not in self.vertList:
             nv = self.addVertex(f)
         if t not in self.vertList:
             nv = self.addVertex(t)
 
-        # then add Neighbor from f to t with weight
         self.vertList[f].addNeighbor(self.vertList[t], weight)
         self.vertList[t].addNeighbor(self.vertList[f], weight)
 
@@ -106,7 +72,7 @@ class Graph:
     def printVertice(self, v):
         print(self.vertList[v].__str__())
 
-    #O(2n + 2) = O(n)
+    # O(2n + 2) = O(n)
     def print_adjacency(self):
         for i in range(0, self.numVertices):
             self.printVertice(i)
@@ -116,7 +82,7 @@ class Graph:
         #     print(row)
         print(np.array(self.adjMatrix))
 
-    #O(2n² + 3n + 5) = O(n²)
+    # O(2n² + 3n + 5) = O(n²)
     def get_binary_array(self):
         binary_array = []
         for i in range(0, self.numVertices):
@@ -125,7 +91,7 @@ class Graph:
                     binary_array.append(self.adjMatrix[i][j])
         return binary_array
 
-    #O(3n + 3) = O(n)
+    # O(3n + 3) = O(n)
     def compacted_array(self):
         binArray = self.get_binary_array()
         compacted = []
@@ -134,7 +100,7 @@ class Graph:
                 compacted.append(i)
         return compacted
 
-    #O(2n² + 5n + 13) = O(n²)
+    # O(2n² + 5n + 13) = O(n²)
     def get_matrix_from_compacted_array(self):
         compacted = self.compacted_array()
         matrix = []
@@ -151,7 +117,7 @@ class Graph:
                 index += 1
         return matrix
 
-    #O(2^n)
+    # O(2^n)
     def q6_global(self, flag):
         matrix = self.adjMatrix
         array = self.compacted_array()
@@ -165,7 +131,7 @@ class Graph:
                     else:
                         print(self.q6_recursiva(i, j, array, matrix))
 
-    #O(3n + 4) = O(n)
+    # O(3n + 4) = O(n)
     def q6_analitica(self, i, j, array):
         indexArray = (int)((self.numVertices*i - i*(i+1)/2)+j-(i+1))
         for k in range(0, len(array)):
@@ -173,7 +139,7 @@ class Graph:
                 return array[k]
         return -1
 
-    #O(2n² + 4n + 3) = O(n²)
+    # O(2n² + 4n + 3) = O(n²)
     def q6_iterativa(self, i, j, array, matrix):
         index = -1
         for k in range(0, self.numVertices):
@@ -183,7 +149,7 @@ class Graph:
                     return array[index]
         return index
 
-    #O(2^n)
+    # O(2^n)
     def util_q6_recursiva(self, i, j, k, l, index, matrix, array):
         index += matrix[k][l]
         if(k == i and l == j):
@@ -195,12 +161,12 @@ class Graph:
                 l = k + 1
             return self.util_q6_recursiva(i, j, k, l, index, matrix, array)
 
-    #O(2^n)
+    # O(2^n)
     def q6_recursiva(self, i, j, array, matrix):
         index = -1
         return self.util_q6_recursiva(i, j, 0, 1, index, matrix, array)
 
-    #O(n²)
+    # O(n²)
     def q7_global(self, flag):
         array_size = len(self.compacted_array())
         for i in range(0, array_size):
@@ -215,10 +181,10 @@ class Graph:
         index = array[indexCompacted]
         k = (int)(self.numVertices*(self.numVertices-1)/2 - index)
         i = (int)(self.numVertices - int(np.ceil((1+sqrt(8*k+1))/2.0)))
-        j = (int)(-self.numVertices*i + i*(i+1)/2 + (i+1) + index) 
+        j = (int)(-self.numVertices*i + i*(i+1)/2 + (i+1) + index)
         print("(", i, ",", j, ") -> ", matrix[i][j])
 
-        #O(3n² + n + 9) = O(n²)
+        # O(3n² + n + 9) = O(n²)
     def q7_iterativa(self, indexCompacted):
         matrix = self.adjMatrix
         array = self.compacted_array()
@@ -233,38 +199,32 @@ class Graph:
         print("-1")
 
     def getVertices(self):
-        """
-        Return all the vertices in the graph
-        Time complexity is O(1) as we simply return all the keys
-        in the vertList dictionary
-        """
-
         return self.vertList.keys()
 
     def getCount(self):
-        """
-        Return a count of all vertices in the Graph
-
-        Time complexity O(1) because we just return the count
-        attribute
-        """
         return self.numVertices
 
-#O(3n + 3) = O(n)
+# O(3n + 3) = O(n)
+
+
 def sum_matrix(vet1, vet2):
     res = []
     for i in range(len(vet1)):
         res.append(vet1[i] + vet2[i])
     return res
 
-#O(3n + 3) = O(n)
+# O(3n + 3) = O(n)
+
+
 def sum_matrix_uniao(vet1, vet2):
     res = []
     for i in range(len(vet1)):
         res.append(vet1[i] or vet2[i])
     return res
 
-#O(3n + 3) = O(n)
+# O(3n + 3) = O(n)
+
+
 def intersection_between_matrix(vet1, vet2):
     res = []
     for i in range(len(vet1)):
