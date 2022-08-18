@@ -1,6 +1,7 @@
 import numpy as np
 from math import ceil
 from numpy import sqrt
+from random import randint
 
 
 class Vertex:
@@ -27,12 +28,13 @@ class Vertex:
 
 class Graph:
 
-    def __init__(self):
+    def __init__(self, numVertices):
         self.vertList = {}
-        self.numVertices = 0
+        self.numVertices = numVertices
         self.adjMatrix = []
-        for i in range(3):
-            self.adjMatrix.append([0 for i in range(3)])
+        for i in range(numVertices):
+            self.adjMatrix.append([0 for i in range(numVertices)])
+        self.create_random_graph()
 
     def addVertex(self, key):
         """
@@ -42,7 +44,7 @@ class Graph:
         """
 
         # add 1 to the number of vertices attribute
-        self.numVertices += 1
+        # self.numVertices += 1
 
         # instantiate a new Vertex class
         newVertex = Vertex(key)
@@ -52,6 +54,20 @@ class Graph:
 
         # return the NewVertex created
         return newVertex
+
+    def create_random_graph(self):
+        for i in range(0, self.numVertices):
+            self.addVertex(i)
+
+        for i in range(0, int(self.numVertices / 10)):
+            start = randint(0, self.numVertices-1)
+            finish = randint(0, self.numVertices-1)
+            if (start != finish):
+                self.addEdge(start, finish)
+            elif start != i:
+                self.addEdge(start, i)
+            else:
+                self.addEdge(i, finish)
 
     def getVertex(self, key):
         """
@@ -98,7 +114,10 @@ class Graph:
 
     def printVertice(self, v):
         print(self.vertList[v].__str__())
-        print("=================")
+
+    def print_adjacency(self):
+        for i in range(0, self.numVertices):
+            self.printVertice(i)
 
     def print_matrix(self):
         # for row in self.adjMatrix:
@@ -258,16 +277,19 @@ def intersection_between_matrix(vet1, vet2):
     return res
 
 
-graph = Graph()
-graph.addVertex(1)
-graph.addVertex(2)
-graph.addEdge(1, 2)
+# graph = Graph()
+# graph.addVertex(1)
+# graph.addVertex(2)
+# graph.addEdge(1, 2)
 # graph.printVertice(1)
 # graph.printVertice(2)
-graph.print_matrix()
-graph.get_binary_array()
-graph.compacted_array()
-graph.get_matrix_from_compacted_array()
+# graph.print_matrix()
+# graph.get_binary_array()
+# graph.compacted_array()
+# graph.get_matrix_from_compacted_array()
+
+graph = Graph(10)
+graph.print_adjacency()
 
 
 #  QUESTAO 8
