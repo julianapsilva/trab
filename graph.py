@@ -14,16 +14,10 @@ class Vertex:
         self.connectedTo[nbr] = weight
 
     def __str__(self):
-        return f"{str(self.id)} connected to: {str([x.id for x in self.connectedTo])}"
+        return f"{str(self.id)} conectado a: {str([x.id for x in self.connectedTo])}"
 
     def getConnections(self):
         return self.connectedTo.keys()
-
-    def getId(self):
-        return self.id
-
-    def getWeight(self, nbr):
-        return self.connectedTo.get(nbr)
 
 
 class Graph:
@@ -42,11 +36,6 @@ class Graph:
         Time complexity is O(1) as we are only adding a single
         new vertex which does not affect any other vertex
         """
-
-        # add 1 to the number of vertices attribute
-        # self.numVertices += 1
-
-        # instantiate a new Vertex class
         newVertex = Vertex(key)
 
         # add the vertex with the key to the vertList dictionary
@@ -59,7 +48,7 @@ class Graph:
         for i in range(0, self.numVertices):
             self.addVertex(i)
 
-        for i in range(0, int(self.numVertices/10)):
+        for i in range(0, int(self.numVertices/1)):
             start = randint(0, self.numVertices-1)
             finish = randint(0, self.numVertices-1)
             if (start != finish):
@@ -130,7 +119,6 @@ class Graph:
             for j in range(i+1, self.numVertices):
                 if (i < j):
                     binary_array.append(self.adjMatrix[i][j])
-        print("binary", binary_array)
         return binary_array
 
     def compacted_array(self):
@@ -139,7 +127,6 @@ class Graph:
         for i in range(0, int(self.numVertices*(self.numVertices-1)/2)):
             if(binArray[i]):
                 compacted.append(i)
-        print("compa", compacted)
         return compacted
 
     def get_matrix_from_compacted_array(self):
@@ -147,31 +134,29 @@ class Graph:
         matrix = []
         index = 0
         pos = 0
-        for i in range(self.numVertices):
-            matrix.append([0 for i in range(self.numVertices)])
+        for q in range(self.numVertices):
+            matrix.append([0 for t in range(self.numVertices)])
         for i in range(0, self.numVertices):
             for j in range(i+1, self.numVertices):
-                if(index == compacted[pos]):
+                if(pos < len(compacted) and index == compacted[pos]):
                     matrix[i][j] = 1
                     matrix[j][i] = 1
                     pos += 1
-                    print(i, j)
                 index += 1
-        print("matrix", matrix)
         return matrix
 
     def q6_global(self, flag):
-        matrix = self.get_matrix_from_compacted_array()
+        matrix = self.adjMatrix
         array = self.compacted_array()
         for i in range(0, self.numVertices):
             for j in range(i+1, self.numVertices):
                 if matrix[i][j]:
                     if flag == 1:
-                        self.q6_analitica(i, j, array)
+                        print(self.q6_analitica(i, j, array))
                     elif flag == 2:
-                        self.q6_iterativa(i, j, array, matrix)
+                        print(self.q6_iterativa(i, j, array, matrix))
                     else:
-                        self.q6_recursiva(i, j, array, matrix)
+                        print(self.q6_recursiva(i, j, array, matrix))
 
     def q6_analitica(self, i, j, array):
         iStart = (int)(self.numVertices*i - i*(i+1)/2)
@@ -214,28 +199,27 @@ class Graph:
                 self.q7_getMatrixIndexFromCompacted_I(i)
 
     def q7_getMatrixIndexFromCompacted_A(self, indexCompacted):
-        matrix = self.get_matrix_from_compacted_array()
+        matrix = self.adjMatrix
         array = self.compacted_array()
         index = array[indexCompacted]
         Ic = (int)(self.numVertices*(self.numVertices-1)/2 - index)
         Ie = ceil((1+sqrt(8*Ic+1))/2.0)
         i = (int)(self.numVertices - int(Ie))
         j = (int)(-self.numVertices*i + i*(i+1)/2 + (i+1) + index)
-        print("(", i, ",", j, ")#")
-        return matrix[i][j]
+        print("(", i, ",", j, ")#", matrix[i][j])
 
     def q7_getMatrixIndexFromCompacted_I(self, indexCompacted):
-        matrix = self.get_matrix_from_compacted_array()
+        matrix = self.adjMatrix
         array = self.compacted_array()
         index = array[indexCompacted]
         count = 0
         for i in range(0, self.numVertices):
             for j in range(i+1, self.numVertices):
                 if count == index:
-                    print(index, "#")
-                    return matrix[i][j]
+                    print(index, "#", matrix[i][j])
+                    return
                 count += 1
-        return -1
+        print("-1")
 
     def getVertices(self):
         """
@@ -277,19 +261,50 @@ def intersection_between_matrix(vet1, vet2):
     return res
 
 
-# graph.print_matrix()
-# graph.get_binary_array()
-# graph.compacted_array()
-# graph.get_matrix_from_compacted_array()
-graph1 = Graph(10)
-graph2 = Graph(10)
+if __name__ == "__main__":
+    print("\n================ QUESTÃO 1 ================\n")
+    graph1 = Graph(10)
+    graph1.print_adjacency()
 
-graph1.print_adjacency()
-graph2.print_adjacency()
+    print("\n================ QUESTÃO 2 ================\n")
+    graph1.print_matrix()
 
+    print("\n================ QUESTÃO 3 ================\n")
+    print(graph1.get_binary_array())
 
-#  QUESTAO 8
-vet1 = graph1.get_binary_array()
-vet2 = graph2.get_binary_array()
-print(sum_matrix_uniao(vet1, vet2))
-# print(intersection_between_matrix(vet1, vet2))
+    print("\n================ QUESTÃO 4 ================\n")
+    print(graph1.compacted_array())
+
+    print("\n================ QUESTÃO 5 ================\n")
+    print(np.array(graph1.get_matrix_from_compacted_array()))
+
+    print("\n================ QUESTÃO 6 ================\n")
+    print("Analítica")
+    graph1.q6_global(1)
+
+    print("\nIterativa")
+    graph1.q6_global(2)
+
+    print("\nRecursiva")
+    graph1.q6_global(3)
+
+    print("\n================ QUESTÃO 7 ================\n")
+    print("Analítica")
+    graph1.q7_global(1)
+
+    print("\nIterativa")
+    graph1.q7_global(2)
+
+    print("\n================ QUESTÃO 8 ================\n")
+    graph2 = Graph(10)
+    graph3 = Graph(10)
+
+    vet1 = graph2.get_binary_array()
+    vet2 = graph3.get_binary_array()
+    print("vet1 =>", graph2.get_binary_array())
+    print("vet2 =>", graph3.get_binary_array())
+    print("soma =>", sum_matrix_uniao(vet1, vet2))
+
+    print("\n\nvet1  =>", graph2.get_binary_array())
+    print("vet2  =>", graph3.get_binary_array())
+    print("inter =>", intersection_between_matrix(vet1, vet2))
